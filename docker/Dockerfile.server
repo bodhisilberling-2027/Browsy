@@ -1,0 +1,32 @@
+FROM mcr.microsoft.com/playwright:v1.47.2-jammy
+
+# Set working directory
+WORKDIR /app
+
+# Install Node.js dependencies
+COPY server/package*.json ./
+RUN npm ci --only=production
+
+# Copy server source code
+COPY server/ ./
+
+# Install Playwright browsers
+RUN npx playwright install chromium
+
+# Create sessions directory
+RUN mkdir -p /app/data
+
+# Set environment variables
+ENV PORT=3100
+ENV MCP_PORT=3325
+ENV NODE_ENV=production
+
+# Expose ports
+EXPOSE 3100 3325
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3100/ || exit 1
+
+# Start the server
+CMD ["npm", "run", "dev"]

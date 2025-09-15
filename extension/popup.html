@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body { font-family: system-ui; width: 280px; padding: 12px; }
+      button { width: 100%; padding: 10px; margin: 6px 0; }
+      .row { display: flex; gap: 8px; }
+      #status { font-size: 12px; color: #666; margin-top: 8px; }
+      .recording { background-color: #ff4444; color: white; }
+      .stopped { background-color: #44aa44; color: white; }
+    </style>
+  </head>
+  <body>
+    <h3>Browsy</h3>
+    <div class="row">
+      <button id="start">▶️ Start Recording</button>
+      <button id="stop">⏹ Stop</button>
+    </div>
+    <input id="sessionName" placeholder="Session name (e.g. amazon-search)" style="width:100%;padding:8px" />
+    <div class="row">
+      <button id="save">💾 Save Session</button>
+      <button id="replay">🔁 Replay</button>
+    </div>
+    <label style="display:block;margin-top:8px;">
+      <input type="checkbox" id="scrapeMode" />
+      Also collect page data (scrape)
+    </label>
+    <p id="status">Ready to record</p>
+    <script src="popup.js"></script>
+  </body>
+</html>

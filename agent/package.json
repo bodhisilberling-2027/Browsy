@@ -1,0 +1,21 @@
+{
+  "name": "browsy-agent",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx cli.ts",
+    "start": "node --enable-source-maps dist/cli.js",
+    "build": "tsc -p ."
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0",
+    "dotenv": "^16.4.5",
+    "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/readline-sync": "^1.4.8",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Browsy",
+  "version": "0.1.0",
+  "description": "Record browser actions and replay them via Playwright.",
+  "permissions": ["scripting", "activeTab", "storage"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "service_worker.js" },
+  "action": { "default_popup": "popup.html" },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js", "recorder.js", "scraper.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
