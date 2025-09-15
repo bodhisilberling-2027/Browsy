@@ -25,14 +25,17 @@ class BrowsyAgent {
 
       // For now, we'll connect to a running MCP server via stdio
       // User should run 'npm run mcp' in server directory first
-      const transport = new StdioClientTransport();
+      const transport = new StdioClientTransport({
+        command: "node",
+        args: ["--enable-source-maps", "dist/mcp.js"]
+      });
       
       await this.client.connect(transport);
-      console.log("✅ Connected to Browsy MCP server");
+      console.log("Connected to Browsy MCP server");
       return true;
     } catch (error) {
-      console.error("❌ Failed to connect to MCP server:", error);
-      console.log("💡 Please run 'cd server && npm run mcp' in another terminal first");
+      console.error("Failed to connect to MCP server:", error);
+      console.log("Please run 'cd server && npm run mcp' in another terminal first");
       return false;
     }
   }
@@ -87,7 +90,7 @@ class BrowsyAgent {
 
   showHelp() {
     console.log(`
-🤖 Browsy Agent - AI-powered browser automation
+Browsy Agent - AI-powered browser automation
 
 Available commands:
   help                          - Show this help message
@@ -118,25 +121,25 @@ Flags:
   }
 
   async run() {
-    console.log("🚀 Starting Browsy Agent...");
+    console.log("Starting Browsy Agent...");
     
     const connected = await this.connect();
     if (!connected) {
-      console.log("💡 Make sure the MCP server is available. Try running 'npm run mcp' in the server directory.");
+      console.log("Make sure the MCP server is available. Try running 'npm run mcp' in the server directory.");
       return;
     }
 
-    console.log("🎯 Browsy Agent ready! Type 'help' for commands or 'exit' to quit.");
+    console.log("Browsy Agent ready! Type 'help' for commands or 'exit' to quit.");
     
     while (true) {
       try {
-        const input = readline.question("\n🤖 > ");
+        const input = readline.question("\n> ");
         if (!input.trim()) continue;
 
         const { command, args, flags } = this.parseCommand(input);
 
         if (["exit", "quit", "q"].includes(command)) {
-          console.log("👋 Goodbye!");
+          console.log("Goodbye!");
           break;
         }
 
@@ -191,13 +194,13 @@ Flags:
             try {
               const data = JSON.parse(result);
               if (data.ok) {
-                console.log(`✅ ${data.message}`);
+                console.log(`SUCCESS: ${data.message}`);
                 if (data.scraped) {
-                  console.log("📄 Scraped data available:");
+                  console.log("Scraped data available:");
                   console.log(data.scraped.slice(0, 500) + (data.scraped.length > 500 ? "..." : ""));
                 }
               } else {
-                console.log(`❌ ${data.message}`);
+                console.log(`ERROR: ${data.message}`);
               }
             } catch {
               console.log(result);
@@ -252,11 +255,11 @@ Flags:
             try {
               const data = JSON.parse(result);
               if (data.hit) {
-                console.log(`✅ API call successful (${data.status})`);
-                console.log("📊 Data preview:");
+                console.log(`API call successful (${data.status})`);
+                console.log("Data preview:");
                 console.log(JSON.stringify(data.data, null, 2).slice(0, 1000));
               } else {
-                console.log("❌ Not a direct API endpoint or call failed");
+                console.log("Not a direct API endpoint or call failed");
               }
             } catch {
               console.log(result);
@@ -275,13 +278,13 @@ Flags:
           } else {
             try {
               const data = JSON.parse(result);
-              console.log(`📋 Session: ${data.name}`);
-              console.log(`🎬 Events: ${data.eventCount}`);
-              console.log(`🕷️  Scrape mode: ${data.scrapeRequested ? "Yes" : "No"}`);
-              console.log(`📅 Created: ${data.createdAt ? new Date(data.createdAt).toLocaleString() : "Unknown"}`);
+              console.log(`Session: ${data.name}`);
+              console.log(`Events: ${data.eventCount}`);
+              console.log(`Scrape mode: ${data.scrapeRequested ? "Yes" : "No"}`);
+              console.log(`Created: ${data.createdAt ? new Date(data.createdAt).toLocaleString() : "Unknown"}`);
               
               if (flags.verbose || flags.v) {
-                console.log("\n🎯 Event details:");
+                console.log("\nEvent details:");
                 data.events.forEach((e: any) => {
                   console.log(`  ${e.index + 1}. ${e.type} ${e.selector ? `-> ${e.selector}` : ""} (${e.url})`);
                 });
@@ -306,21 +309,19 @@ Flags:
             }
           });
           
-          console.log(`🔧 Calling tool: ${toolName}`);
+          console.log(`Calling tool: ${toolName}`);
           const response = await this.callTool(toolName, parsedArgs);
           console.log(this.formatResponse(response));
           continue;
         }
 
         // If no command matched, show help
-        console.log(`❓ Unknown command: ${command}`);
-        console.log("💡 Type 'help' to see available commands");
+        console.log(`Unknown command: ${command}`);
+        console.log("Type 'help' to see available commands");
 
       } catch (error: any) {
-        console.error("❌ Error:", error.message);
-        if (flags.verbose || flags.v) {
-          console.error(error);
-        }
+        console.error("Error:", error.message);
+        // Note: flags not available in this scope
       }
     }
 
@@ -332,7 +333,7 @@ async function main() {
   const agent = new BrowsyAgent();
   
   process.on("SIGINT", async () => {
-    console.log("\n👋 Shutting down...");
+    console.log("\nShutting down...");
     await agent.disconnect();
     process.exit(0);
   });

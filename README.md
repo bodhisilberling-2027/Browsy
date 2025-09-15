@@ -36,24 +36,29 @@ browsy/
 
 ## Features
 
-### Phase 1 - Recording & Replay
-- Chrome extension records clicks, scrolls, inputs, and navigation
-- Local backend replays actions using Playwright
-- Robust selector strategy with fallbacks
+### Browser Action Recording
+The Chrome extension captures all user interactions including clicks, scrolls, form inputs, keyboard shortcuts, and page navigation. Each action is recorded with precise timing, element selectors, and contextual information to ensure accurate replay.
 
-### Phase 2 - MCP Integration
-- Converts recorded sessions into MCP tools
-- Exposes scraping and API query capabilities
-- Compatible with any MCP-enabled AI agent
+### Intelligent Element Selection
+Uses a multi-layered selector strategy that combines CSS selectors, XPath, text content, and visual positioning. When websites update their HTML structure, the system automatically falls back to alternative selection methods to maintain automation reliability.
 
-### Phase 3 - AI Agent
-- Simple CLI agent for testing MCP tools
-- Can replay sessions and scrape pages on command
+### Model Context Protocol Integration
+Recorded sessions are automatically exposed as callable tools through the Model Context Protocol (MCP). AI agents can discover and execute these tools without requiring custom integration code. Each session becomes a reusable automation component.
 
-### Phase 4 - Advanced Features
-- Network API fast-path for direct API calls
-- Cloud deployment with Docker
-- Anti-bot detection bypass capabilities
+### Playwright-Based Replay Engine
+Sessions are converted to Playwright scripts for reliable cross-browser automation. The replay engine handles dynamic content loading, manages timeouts, and provides detailed execution logs for debugging failed automations.
+
+### Network Request Optimization
+Analyzes recorded sessions to identify direct API calls that can bypass full browser automation. When possible, the system extracts API endpoints and parameters to enable faster execution through direct HTTP requests.
+
+### Session Management
+Provides a complete CRUD interface for managing recorded sessions. Sessions can be listed, inspected, modified, exported as standalone Playwright scripts, or deleted. Supports both JSON file storage and database backends.
+
+### CLI Agent Interface
+Includes a command-line agent that connects to the MCP server for interactive session management. Supports session replay, URL scraping, API testing, and detailed session inspection with verbose logging options.
+
+### Production Deployment
+Docker containerization with nginx reverse proxy for production deployments. Includes health checks, logging configuration, and environment variable management for scalable automation infrastructure.
 
 ## Quick Start
 

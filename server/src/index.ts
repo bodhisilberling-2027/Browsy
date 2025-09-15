@@ -17,7 +17,8 @@ app.get("/", (req, res) => {
   res.json({ 
     status: "ok", 
     service: "Browsy Server",
-    version: "0.1.0",
+    version: "1.0.0",
+    uptime: process.uptime(),
     endpoints: ["/api/sessions", "/api/replay/:name", "/api/scrape", "/api/sessions/:name/script"]
   });
 });
@@ -175,8 +176,8 @@ app.post("/api/sessions/:name/analyze", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Browsy server listening on http://localhost:${PORT}`);
-  console.log(`📝 Available endpoints:`);
+  console.log(`Browsy server listening on http://localhost:${PORT}`);
+  console.log(`Available endpoints:`);
   console.log(`   GET  /                     - Health check`);
   console.log(`   POST /api/sessions         - Save session`);
   console.log(`   GET  /api/sessions         - List sessions`);

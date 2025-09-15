@@ -128,7 +128,9 @@ $("save").onclick = async () => {
         scrapeMode: $("scrapeMode").checked
       });
     } else {
-      setStatus("Save failed - is server running?");
+      const errorText = await response.text();
+      setStatus(`Save failed: ${response.status} - Check if server is running`);
+      console.error("Save error:", errorText);
     }
   } catch (e) {
     setStatus("Save failed: " + e.message);
