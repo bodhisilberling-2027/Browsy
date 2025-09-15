@@ -9,14 +9,14 @@ export async function scrape(url: string) {
     
     const result = await page.evaluate(() => {
       const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,h6"))
-        .map(h => h.innerText.trim())
+        .map(h => (h as HTMLElement).innerText.trim())
         .filter(text => text.length > 0)
         .slice(0,100);
         
       const links = Array.from(document.querySelectorAll("a[href]"))
         .map(a => ({
-          text: a.innerText.trim().slice(0,200), 
-          href: a.href
+          text: (a as HTMLElement).innerText.trim().slice(0,200), 
+          href: (a as HTMLAnchorElement).href
         }))
         .filter(link => link.text.length > 0)
         .slice(0,200);
@@ -34,7 +34,7 @@ export async function scrape(url: string) {
         
       const buttons = Array.from(document.querySelectorAll("button, input[type='submit'], input[type='button']"))
         .map(btn => ({
-          text: btn.innerText?.trim() || (btn as HTMLInputElement).value || '',
+          text: (btn as HTMLElement).innerText?.trim() || (btn as HTMLInputElement).value || '',
           type: (btn as HTMLInputElement).type || 'button',
           id: btn.id || null,
           className: btn.className || null
@@ -44,7 +44,7 @@ export async function scrape(url: string) {
         
       // Get main content text, excluding navigation and footer
       const mainContent = document.querySelector('main, article, .content, #content') || document.body;
-      const textContent = mainContent.innerText.slice(0, 10000);
+      const textContent = (mainContent as HTMLElement).innerText.slice(0, 10000);
       
       return { 
         url: location.href, 

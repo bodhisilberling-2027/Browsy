@@ -87,8 +87,8 @@ export async function replay(session: Session): Promise<{ok: boolean, scraped?: 
     let scraped: string | null = null;
     if (session.scrapeRequested) {
       scraped = await page.evaluate(() => {
-        const headings = Array.from(document.querySelectorAll("h1,h2,h3")).map(h=>h.innerText.trim()).slice(0,50);
-        const links = Array.from(document.querySelectorAll("a[href]")).map(a=>({text:a.innerText.trim().slice(0,100), href:a.href})).slice(0,100);
+        const headings = Array.from(document.querySelectorAll("h1,h2,h3")).map(h=>(h as HTMLElement).innerText.trim()).slice(0,50);
+        const links = Array.from(document.querySelectorAll("a[href]")).map(a=>({text:(a as HTMLElement).innerText.trim().slice(0,100), href:(a as HTMLAnchorElement).href})).slice(0,100);
         return JSON.stringify({
           url: location.href,
           title: document.title,
